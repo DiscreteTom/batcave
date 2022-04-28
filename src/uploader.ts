@@ -25,7 +25,7 @@ async function uploadFile(filepath: string) {
       Key: key,
       Body: fs.createReadStream(filepath),
     },
-    tags: [{ Key: config.storage.tagKey, Value: hash }],
+    tags: [{ Key: "sha256", Value: hash }],
     queueSize: config.storage.queueSize,
     partSize: config.storage.partSize * 1024 * 1024,
   });
