@@ -9,9 +9,13 @@ const filename = ".cache.yml";
 
 export default {
   loadCache() {
-    cache = yaml.load(fs.readFileSync(filename, "utf-8")) as {
-      [key: string]: string;
-    };
+    try {
+      cache = yaml.load(fs.readFileSync(filename, "utf-8")) as {
+        [key: string]: string;
+      };
+    } catch {
+      cache = {};
+    }
   },
   saveCache() {
     fs.writeFileSync(filename, yaml.dump(cache), "utf-8");
