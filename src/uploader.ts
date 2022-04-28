@@ -71,24 +71,18 @@ async function uploadFolder(folder: string) {
     dirents.map((d) => d.name).includes(".gitignore")
   ) {
     console.log(chalk.gray(`Apply: ${folder}.gitignore`));
-    await Promise.all(
-      filesNotGitignore(folder, dirents).map(async (name) => {
-        await lock.lock(async () => {
-          await uploadFile(folder + name);
-        });
-      })
-    );
-  } else {
-    await Promise.all(
-      dirents.map(async (d) => {
-        if (d.isDirectory()) await uploadFolder(folder + d.name);
-        else if (d.isFile())
-          await lock.lock(async () => {
-            await uploadFile(folder + d.name);
-          });
-      })
-    );
+    dirents = direntsNotGitignore(folder, dirents);
   }
+
+  await Promise.all(
+    dirents.map(async (d) => {
+      if (d.isDirectory()) await uploadFolder(folder + d.name);
+      else if (d.isFile())
+        await lock.lock(async () => {
+          await uploadFile(folder + d.name);
+        });
+    })
+  );
 }
 
 function pathExcluded(path: string) {
@@ -102,9 +96,9 @@ function folderExcluded(dirents: fs.Dirent[]) {
     .includes(true);
 }
 
-function filesNotGitignore(path: string, dirents: fs.Dirent[]) {
+function direntsNotGitignore(path: string, dirents: fs.Dirent[]) {
   let git = ignParser.compile(fs.readFileSync(path + ".gitignore", "utf8"));
-  return dirents.filter((d) => git.accepts(d.name)).map((d) => d.name);
+  return dirents.filter((d) => git.accepts(d.name));
 }
 
 export default {
