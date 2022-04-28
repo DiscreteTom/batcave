@@ -103,13 +103,10 @@ function folderExcluded(dirents: fs.Dirent[]) {
 }
 
 function gitTrackedFiles(path: string) {
-  shell.pushd(path);
-  let files = shell
-    .exec("git ls-tree -r --name-only HEAD")
+  return shell
+    .exec("git ls-tree -r --name-only HEAD", { cwd: path })
     .stdout.split("\n")
     .filter((n) => n.length !== 0);
-  shell.popd();
-  return files;
 }
 
 export default {
