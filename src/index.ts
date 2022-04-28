@@ -25,4 +25,4 @@ Promise.all(
       await uploader.uploadFile(p);
     }
   })
-).then(cache.saveCache);
+).finally(cache.saveCache);
