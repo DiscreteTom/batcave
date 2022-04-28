@@ -33,6 +33,9 @@ include:
 exclude:
   - "**/node_modules"
   - "**/.venv"
+  - "**/__pycache__"
+  - "**/__pypackages__"
+  - "**/site-packages"
 excludeFolderContains:
   - .gitignore
   - .git
