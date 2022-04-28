@@ -15,7 +15,10 @@ type Config = {
   include: string[];
   exclude: string[];
   excludeFolderContains: string[];
-  gitignore: boolean;
+  concurrent: {
+    limit: number;
+    interval: number;
+  };
 };
 
 let config = yaml.load(fs.readFileSync("config.yml", "utf-8")) as Config;

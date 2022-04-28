@@ -7,6 +7,7 @@ import * as minimatch from "minimatch";
 import * as sha256file from "sha256-file";
 import cache from "./cache";
 import * as chalk from "chalk";
+import lock from "./lock";
 
 let s3 = new S3({
   credentials: fromIni({ profile: config.storage.profile }),
@@ -14,6 +15,8 @@ let s3 = new S3({
 });
 
 async function uploadFile(filepath: string) {
+  await lock.lock();
+
   if (pathExcluded(filepath)) {
     console.log(chalk.gray(`Ignore: ${filepath}`));
     return;
@@ -41,12 +44,13 @@ async function uploadFile(filepath: string) {
     partSize: config.storage.partSize * 1024 * 1024,
   });
 
-  uploader.on("httpUploadProgress", (p) => {
-    // console.log(p);
-  });
+  // uploader.on("httpUploadProgress", (p) => {
+  //   console.log(p);
+  // });
 
   await uploader.done();
   cache.set(filepath, hash);
+  lock.unlock();
 
   console.log(chalk.green(`Done: ${filepath}`));
 }
