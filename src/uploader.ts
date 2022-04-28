@@ -13,14 +13,20 @@ let s3 = new S3({
 });
 
 async function uploadFile(filepath: string) {
-  if (pathExcluded(filepath)) return;
+  if (pathExcluded(filepath)) {
+    console.log(`Ignore: ${filepath}`);
+    return;
+  }
 
   let hash = sha256file(filepath);
   let bucket = config.storage.bucket;
   let key = config.storage.prefix + filepath;
 
   // check hash
-  if (cache.get(filepath) == hash) return;
+  if (cache.get(filepath) == hash) {
+    console.log(`Hash match: ${filepath}`);
+    return;
+  }
 
   let uploader = new Upload({
     client: s3,
@@ -46,10 +52,16 @@ async function uploadFile(filepath: string) {
 
 async function uploadFolder(folder: string) {
   if (!folder.endsWith("/")) folder += "/";
-  if (pathExcluded(folder)) return;
+  if (pathExcluded(folder)) {
+    console.log(`Ignore: ${folder}`);
+    return;
+  }
 
   let dirents = fs.readdirSync(folder, { withFileTypes: true });
-  if (folderExcluded(dirents)) return;
+  if (folderExcluded(dirents)) {
+    console.log(`Ignore: ${folder}`);
+    return;
+  }
 
   await Promise.all(
     dirents.map(async (d) => {
