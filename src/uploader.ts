@@ -103,7 +103,7 @@ function folderExcluded(dirents: fs.Dirent[]) {
 }
 
 function gitTrackedFiles(path: string) {
-  shell.pushd("path");
+  shell.pushd(path);
   let files = shell
     .exec("git ls-tree -r --name-only HEAD")
     .stdout.split("\n")
