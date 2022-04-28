@@ -1,0 +1,23 @@
+storage:
+  bucket: BUCKET_NAME
+  prefix: PREFIX/
+include:
+  - ~/.aws
+  - ~/.cdk
+  - ~/.config
+  - ~/.git-secrets
+  - ~/.git-templates
+  - ~/.ssh
+  - ~/.vim
+  - ~/bin
+  - ~/Desktop
+  - ~/Documents
+  - ~/Downloads
+  - ~/Favorites
+  - ~/Music
+  - ~/Pictures
+  - ~/Videos
+exclude:
+  - "**/node_modules"
+  - .venv
+gitignore: true
