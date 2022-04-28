@@ -6,6 +6,12 @@ import cache from "./cache";
 
 cache.loadCache();
 
+process.on("SIGINT", () => {
+  cache.saveCache();
+  console.log("Cache saved.");
+  process.exit(0);
+});
+
 // parse include paths
 let paths: string[] = [];
 config.include.map((i) => paths.push(...glob.sync(i)));
