@@ -13,11 +13,13 @@
     "@aws-sdk/client-s3": "^3.79.0",
     "@aws-sdk/credential-provider-ini": "^3.79.0",
     "@aws-sdk/lib-storage": "^3.79.0",
+    "@types/shelljs": "^0.8.11",
     "chalk": "4",
     "glob": "^8.0.1",
     "js-yaml": "^4.1.0",
     "minimatch": "^5.0.1",
-    "sha256-file": "^1.0.0"
+    "sha256-file": "^1.0.0",
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",

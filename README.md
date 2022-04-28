@@ -32,14 +32,11 @@ include:
   - ~/Videos
 exclude:
   - "**/node_modules"
-  - "**/.venv"
-  - "**/__pycache__"
-  - "**/__pypackages__"
-  - "**/site-packages"
 excludeFolderContains:
   - .gitignore
   - .git
 concurrent:
   limit: 100
   interval: 2000
+useGitignore: true
 ```

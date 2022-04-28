@@ -19,6 +19,7 @@ type Config = {
     limit: number;
     interval: number;
   };
+  useGitignore: boolean;
 };
 
 let config = yaml.load(fs.readFileSync("config.yml", "utf-8")) as Config;

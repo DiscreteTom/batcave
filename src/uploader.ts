@@ -8,6 +8,7 @@ import * as sha256file from "sha256-file";
 import cache from "./cache";
 import * as chalk from "chalk";
 import lock from "./lock";
+import * as shell from "shelljs";
 
 let s3 = new S3({
   credentials: fromIni({ profile: config.storage.profile }),
@@ -65,15 +66,29 @@ async function uploadFolder(folder: string) {
     return;
   }
 
-  await Promise.all(
-    dirents.map(async (d) => {
-      if (d.isDirectory()) await uploadFolder(folder + d.name);
-      else if (d.isFile())
+  if (
+    config.useGitignore &&
+    dirents.map((d) => d.name).includes(".gitignore")
+  ) {
+    console.log(chalk.gray(`Apply: ${folder}.gitignore`));
+    await Promise.all(
+      gitTrackedFiles(folder).map(async (name) => {
         await lock.lock(async () => {
-          await uploadFile(folder + d.name);
+          await uploadFile(folder + name);
         });
-    })
-  );
+      })
+    );
+  } else {
+    await Promise.all(
+      dirents.map(async (d) => {
+        if (d.isDirectory()) await uploadFolder(folder + d.name);
+        else if (d.isFile())
+          await lock.lock(async () => {
+            await uploadFile(folder + d.name);
+          });
+      })
+    );
+  }
 }
 
 function pathExcluded(path: string) {
@@ -85,6 +100,16 @@ function folderExcluded(dirents: fs.Dirent[]) {
   return config.excludeFolderContains
     .map((pat) => names.map((n) => minimatch(n, pat)).includes(true))
     .includes(true);
+}
+
+function gitTrackedFiles(path: string) {
+  shell.pushd("path");
+  let files = shell
+    .exec("git ls-tree -r --name-only HEAD")
+    .stdout.split("\n")
+    .filter((n) => n.length !== 0);
+  shell.popd();
+  return files;
 }
 
 export default {
