@@ -4,6 +4,7 @@ import * as fs from "fs";
 import config from "./config";
 import * as minimatch from "minimatch";
 import * as sha256file from "sha256-file";
+import cache from "./cache";
 
 let s3 = new S3({});
 
@@ -15,11 +16,7 @@ async function uploadFile(filepath: string) {
   let key = config.storage.prefix + filepath;
 
   // check hash
-  try {
-    let tags = await s3.getObjectTagging({ Bucket: bucket, Key: key });
-    let tag = tags.TagSet.filter((t) => t.Key == config.storage.tagKey)[0];
-    if (tag.Value == hash) return;
-  } catch {}
+  if (cache.get(filepath) == hash) return;
 
   let uploader = new Upload({
     client: s3,
@@ -38,6 +35,7 @@ async function uploadFile(filepath: string) {
   });
 
   await uploader.done();
+  cache.set(filepath, hash);
 
   console.log(`Done: ${filepath}`);
 }

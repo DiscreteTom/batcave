@@ -2,6 +2,9 @@ import * as fs from "fs";
 import * as glob from "glob";
 import config from "./config";
 import uploader from "./uploader";
+import cache from "./cache";
+
+cache.loadCache();
 
 // parse include paths
 let paths: string[] = [];
@@ -16,4 +19,4 @@ Promise.all(
       await uploader.uploadFile(p);
     }
   })
-);
+).then(cache.saveCache);
