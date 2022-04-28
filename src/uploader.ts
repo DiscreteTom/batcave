@@ -1,5 +1,5 @@
 import { Upload } from "@aws-sdk/lib-storage";
-import { S3Client, S3 } from "@aws-sdk/client-s3";
+import { S3 } from "@aws-sdk/client-s3";
 import * as fs from "fs";
 import config from "./config";
 import * as minimatch from "minimatch";
