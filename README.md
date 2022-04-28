@@ -32,9 +32,9 @@ include:
   - ~/Videos
 exclude:
   - "**/node_modules"
+  - "**/.git"
 excludeFolderContains:
   - .gitignore
-  - .git
 concurrent:
   limit: 100
   interval: 2000

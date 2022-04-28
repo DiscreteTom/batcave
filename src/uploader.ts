@@ -8,7 +8,7 @@ import * as sha256file from "sha256-file";
 import cache from "./cache";
 import * as chalk from "chalk";
 import lock from "./lock";
-import * as shell from "shelljs";
+import * as ignParser from "gitignore-parser";
 
 let s3 = new S3({
   credentials: fromIni({ profile: config.storage.profile }),
@@ -72,7 +72,7 @@ async function uploadFolder(folder: string) {
   ) {
     console.log(chalk.gray(`Apply: ${folder}.gitignore`));
     await Promise.all(
-      gitTrackedFiles(folder).map(async (name) => {
+      filesNotGitignore(folder, dirents).map(async (name) => {
         await lock.lock(async () => {
           await uploadFile(folder + name);
         });
@@ -102,11 +102,9 @@ function folderExcluded(dirents: fs.Dirent[]) {
     .includes(true);
 }
 
-function gitTrackedFiles(path: string) {
-  return shell
-    .exec("git ls-tree -r --name-only HEAD", { cwd: path })
-    .stdout.split("\n")
-    .filter((n) => n.length !== 0);
+function filesNotGitignore(path: string, dirents: fs.Dirent[]) {
+  let git = ignParser.compile(fs.readFileSync(path + ".gitignore", "utf8"));
+  return dirents.filter((d) => git.accepts(d.name)).map((d) => d.name);
 }
 
 export default {
