@@ -911,6 +911,11 @@
   resolved "https://registry.npmmirror.com/@types/node/-/node-17.0.29.tgz#7f2e1159231d4a077bb660edab0fde373e375a3d"
   integrity sha512-tx5jMmMFwx7wBwq/V7OohKDVb/JwJU5qCVkeLMh1//xycAJ/ESuw9aJ9SEtlCZDYi2pBfe4JkisSoAtbOsBNAA==
 
+"@types/sha256-file@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/@types/sha256-file/-/sha256-file-1.0.1.tgz#e00ca4732284a5fd8a504ba48a0240683a152a7e"
+  integrity sha512-YnDbU9sc81JuLjARNq2Q4Gw6eXuFsfgbNL6xEso8bQJeTpXR9bhGVZErFqSfXA4+6O0U53gHb1kobbZB2Du07A==
+
 argparse@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmmirror.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
@@ -1035,6 +1040,11 @@ safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.npmmirror.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
+
+sha256-file@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/sha256-file/-/sha256-file-1.0.0.tgz#02cade5e658da3fbc167c3270bdcdfd5409f1b65"
+  integrity sha512-nqf+g0veqgQAkDx0U2y2Tn2KWyADuuludZTw9A7J3D+61rKlIIl9V5TS4mfnwKuXZOH9B7fQyjYJ9pKRHIsAyg==
 
 stream-browserify@3.0.0:
   version "3.0.0"

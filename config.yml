@@ -1,6 +1,9 @@
 storage:
   bucket: BUCKET_NAME
   prefix: PREFIX/
+  queueSize: 4
+  partSize: 5 # MB
+  tagKey: batcave-sha256
 include:
   - ~/.aws
   - ~/.cdk
@@ -19,5 +22,7 @@ include:
   - ~/Videos
 exclude:
   - "**/node_modules"
-  - .venv
-gitignore: true
+  - "**/.venv"
+excludeFolderContains:
+  - .gitignore
+  - .git

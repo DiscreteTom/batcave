@@ -1,28 +1,19 @@
-import * as yaml from "js-yaml";
 import * as fs from "fs";
 import * as glob from "glob";
-import * as os from "os";
+import config from "./config";
+import uploader from "./uploader";
 
-type Config = {
-  storage: {
-    bucket: string;
-    prefix: string;
-  };
-  include: string[];
-  exclude: string[];
-  gitignore: boolean;
-};
+// parse include paths
+let paths: string[] = [];
+config.include.map((i) => paths.push(...glob.sync(i)));
 
-let config = yaml.load(fs.readFileSync("config.yml", "utf-8")) as Config;
-let home = os.homedir().replaceAll("\\", "/");
-config.include = config.include.map((i) =>
-  i.startsWith("~") ? home + i.slice(1) : i
+Promise.all(
+  paths.map(async (p) => {
+    let stat = fs.lstatSync(p);
+    if (stat.isDirectory()) {
+      await uploader.uploadFolder(p);
+    } else if (stat.isFile()) {
+      await uploader.uploadFile(p);
+    }
+  })
 );
-
-// parse target files
-let files: string[] = [];
-config.include.map((i) => {
-  files.push(...glob.sync(i));
-});
-
-console.log(files);
