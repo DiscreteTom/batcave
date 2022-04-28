@@ -15,8 +15,6 @@ let s3 = new S3({
 });
 
 async function uploadFile(filepath: string) {
-  await lock.lock();
-
   if (pathExcluded(filepath)) {
     console.log(chalk.gray(`Ignore: ${filepath}`));
     return;
@@ -50,7 +48,6 @@ async function uploadFile(filepath: string) {
 
   await uploader.done();
   cache.set(filepath, hash);
-  lock.unlock();
 
   console.log(chalk.green(`Done: ${filepath}`));
 }
@@ -71,7 +68,10 @@ async function uploadFolder(folder: string) {
   await Promise.all(
     dirents.map(async (d) => {
       if (d.isDirectory()) await uploadFolder(folder + d.name);
-      else if (d.isFile()) await uploadFile(folder + d.name);
+      else if (d.isFile())
+        await lock.lock(async () => {
+          await uploadFile(folder + d.name);
+        });
     })
   );
 }
