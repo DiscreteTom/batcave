@@ -9,6 +9,7 @@ type Config = {
     queueSize: number;
     partSize: number;
     tagKey: string;
+    profile: string;
   };
   include: string[];
   exclude: string[];

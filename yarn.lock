@@ -277,7 +277,7 @@
     "@aws-sdk/url-parser" "3.78.0"
     tslib "^2.3.1"
 
-"@aws-sdk/credential-provider-ini@3.79.0":
+"@aws-sdk/credential-provider-ini@3.79.0", "@aws-sdk/credential-provider-ini@^3.79.0":
   version "3.79.0"
   resolved "https://registry.npmmirror.com/@aws-sdk/credential-provider-ini/-/credential-provider-ini-3.79.0.tgz#a5971bca79d344f60a09ed942ce61e2c0bf03ac2"
   integrity sha512-7x2++HydHKXzj9gS7t1Ty4cyJm58IBt9JuewUzzjZf2X0AjYpj7QXRKi5kjGoptz5tx1IrGHwljBsBVcaeLeqw==

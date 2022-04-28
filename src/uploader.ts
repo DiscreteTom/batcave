@@ -1,12 +1,13 @@
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3 } from "@aws-sdk/client-s3";
+import { fromIni } from "@aws-sdk/credential-provider-ini";
 import * as fs from "fs";
 import config from "./config";
 import * as minimatch from "minimatch";
 import * as sha256file from "sha256-file";
 import cache from "./cache";
 
-let s3 = new S3({});
+let s3 = new S3({ credentials: fromIni({ profile: config.storage.profile }) });
 
 async function uploadFile(filepath: string) {
   if (pathExcluded(filepath)) return;

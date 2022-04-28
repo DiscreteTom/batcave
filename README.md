@@ -12,6 +12,7 @@ storage:
   prefix: PREFIX/
   queueSize: 4
   partSize: 5 # MB
+  profile: default
 include:
   - ~/.aws
   - ~/.cdk
