@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 out
+.cache.yml
+config.yml
