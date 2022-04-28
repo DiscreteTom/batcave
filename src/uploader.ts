@@ -6,6 +6,7 @@ import config from "./config";
 import * as minimatch from "minimatch";
 import * as sha256file from "sha256-file";
 import cache from "./cache";
+import * as chalk from "chalk";
 
 let s3 = new S3({
   credentials: fromIni({ profile: config.storage.profile }),
@@ -14,7 +15,7 @@ let s3 = new S3({
 
 async function uploadFile(filepath: string) {
   if (pathExcluded(filepath)) {
-    console.log(`Ignore: ${filepath}`);
+    console.log(chalk.gray(`Ignore: ${filepath}`));
     return;
   }
 
@@ -24,7 +25,7 @@ async function uploadFile(filepath: string) {
 
   // check hash
   if (cache.get(filepath) == hash) {
-    console.log(`Hash match: ${filepath}`);
+    console.log(chalk.gray(`Hash match: ${filepath}`));
     return;
   }
 
@@ -47,19 +48,19 @@ async function uploadFile(filepath: string) {
   await uploader.done();
   cache.set(filepath, hash);
 
-  console.log(`Done: ${filepath}`);
+  console.log(chalk.green(`Done: ${filepath}`));
 }
 
 async function uploadFolder(folder: string) {
   if (!folder.endsWith("/")) folder += "/";
   if (pathExcluded(folder)) {
-    console.log(`Ignore: ${folder}`);
+    console.log(chalk.gray(`Ignore: ${folder}`));
     return;
   }
 
   let dirents = fs.readdirSync(folder, { withFileTypes: true });
   if (folderExcluded(dirents)) {
-    console.log(`Ignore: ${folder}`);
+    console.log(chalk.gray(`Ignore: ${folder}`));
     return;
   }
 

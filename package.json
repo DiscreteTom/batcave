@@ -13,6 +13,7 @@
     "@aws-sdk/client-s3": "^3.79.0",
     "@aws-sdk/credential-provider-ini": "^3.79.0",
     "@aws-sdk/lib-storage": "^3.79.0",
+    "chalk": "4",
     "glob": "^8.0.1",
     "js-yaml": "^4.1.0",
     "minimatch": "^5.0.1",
