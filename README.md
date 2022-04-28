@@ -13,6 +13,7 @@ storage:
   queueSize: 4
   partSize: 5 # MB
   profile: default
+  region: us-east-1
 include:
   - ~/.aws
   - ~/.cdk

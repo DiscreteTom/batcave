@@ -7,7 +7,10 @@ import * as minimatch from "minimatch";
 import * as sha256file from "sha256-file";
 import cache from "./cache";
 
-let s3 = new S3({ credentials: fromIni({ profile: config.storage.profile }) });
+let s3 = new S3({
+  credentials: fromIni({ profile: config.storage.profile }),
+  region: config.storage.region,
+});
 
 async function uploadFile(filepath: string) {
   if (pathExcluded(filepath)) return;

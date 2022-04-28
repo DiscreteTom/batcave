@@ -10,6 +10,7 @@ type Config = {
     partSize: number;
     tagKey: string;
     profile: string;
+    region: string;
   };
   include: string[];
   exclude: string[];
