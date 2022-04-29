@@ -1,6 +1,6 @@
 # Batcave
 
-Backup your files to AWS S3.
+Backup your PC files to AWS S3.
 
 ## Config
 
@@ -36,6 +36,7 @@ include:
 exclude:
   # you can use glob syntax
   - "**/node_modules"
+  - "**/.venv"
   - "**/.git"
 excludeFolderContains:
   # you can use glob syntax
