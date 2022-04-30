@@ -2,9 +2,15 @@
 
 Backup your PC files to AWS S3.
 
-## Config
+## Installation
 
-Create a file named `config.yml` with the following content:
+```bash
+npm install -g @dt/batcave
+```
+
+## Usage
+
+Create a file e.g. `backup.yml` with the following content:
 
 ```yml
 storage:
@@ -49,20 +55,7 @@ useGitignore: true # use folder's '.gitignore' to ignore top-level dirents.
 
 > Multipart upload configuration: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_lib_storage.html
 
-## Build and Run
-
-Once you have the `config.yml` ready, you can use the following command to backup your files:
-
-```bash
-# install dependencies
-yarn
-
-# compile typescript
-yarn build
-
-# start backup
-yarn start
-```
+Then you can use `batcave backup.yml` to backup your files.
 
 ## Cache
 
