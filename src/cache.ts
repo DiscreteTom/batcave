@@ -10,9 +10,10 @@ const filename = ".cache.yml";
 export default {
   loadCache() {
     try {
-      cache = yaml.load(fs.readFileSync(filename, "utf-8")) as {
-        [key: string]: string;
-      };
+      cache =
+        (yaml.load(fs.readFileSync(filename, "utf-8")) as {
+          [key: string]: string;
+        }) || {};
     } catch {
       cache = {};
     }

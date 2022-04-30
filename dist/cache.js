@@ -7,7 +7,8 @@ const filename = ".cache.yml";
 exports.default = {
     loadCache() {
         try {
-            cache = yaml.load(fs.readFileSync(filename, "utf-8"));
+            cache =
+                yaml.load(fs.readFileSync(filename, "utf-8")) || {};
         }
         catch {
             cache = {};
