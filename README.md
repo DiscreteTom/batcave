@@ -5,7 +5,7 @@ Backup your PC files to AWS S3.
 ## Installation
 
 ```bash
-npm install -g @dt/batcave
+npm install -g @discretetom/batcave
 ```
 
 ## Usage
