@@ -26,7 +26,9 @@ function must(condition: any, errMsg: string) {
   if (!condition) console.log(chalk.red(errMsg));
 }
 
-let config = yaml.load(fs.readFileSync("config.yml", "utf-8")) as Config;
+const filename = process.argv.length > 2 ? process.argv[2] : "config.yml";
+
+let config = yaml.load(fs.readFileSync(filename, "utf-8")) as Config;
 must(config.storage.bucket, "Missing bucket name");
 config.storage.prefix ||= "";
 config.storage.queueSize ||= 4;
