@@ -3,44 +3,42 @@ import { S3 } from "@aws-sdk/client-s3";
 import { fromIni } from "@aws-sdk/credential-provider-ini";
 import * as fs from "fs";
 import config from "./config";
-import * as minimatch from "minimatch";
-import * as sha256file from "sha256-file";
-import cache from "./cache";
 import * as chalk from "chalk";
-import lock from "./lock";
-import * as ignParser from "gitignore-parser";
+import { lock } from "./lock";
+import { PathMapping } from "./model";
 
 let s3 = new S3({
   credentials: fromIni({ profile: config.storage.profile }),
   region: config.storage.region,
 });
 
-async function uploadFile(filepath: string) {
-  if (pathExcluded(filepath)) {
-    console.log(chalk.gray(`Ignore: ${filepath}`));
-    return;
-  }
+/** Upload a single file. */
+export async function uploadFile(pm: PathMapping) {
+  // if (pathExcluded(filepath)) {
+  //   console.log(chalk.gray(`Ignore: ${filepath}`));
+  //   return;
+  // }
 
-  let hash = sha256file(filepath);
-  let bucket = config.storage.bucket;
-  let key = config.storage.prefix + filepath;
+  const bucket = config.storage.bucket;
+  const key = config.storage.prefix + pm.remote;
 
   // check hash
-  if (cache.get(filepath) == hash) {
-    console.log(chalk.gray(`Hash match: ${filepath}`));
-    return;
-  }
+  // if (cache.get(filepath) == hash) {
+  //   console.log(chalk.gray(`Hash match: ${filepath}`));
+  //   return;
+  // }
+
+  // TODO: check modified date.
 
   let uploader = new Upload({
     client: s3,
     params: {
       Bucket: bucket,
       Key: key,
-      Body: fs.createReadStream(filepath),
+      Body: fs.createReadStream(pm.local),
     },
-    tags: [{ Key: "sha256", Value: hash }],
-    queueSize: config.storage.queueSize,
-    partSize: config.storage.partSize * 1024 * 1024,
+    queueSize: config.transfer.multipart.queueSize,
+    partSize: config.transfer.multipart.partSize * 1024 * 1024,
   });
 
   // uploader.on("httpUploadProgress", (p) => {
@@ -48,60 +46,61 @@ async function uploadFile(filepath: string) {
   // });
 
   await uploader.done();
-  cache.set(filepath, hash);
 
-  console.log(chalk.green(`Done: ${filepath}`));
+  console.log(chalk.green(`Done: ${pm.local}`));
 }
 
-async function uploadFolder(folder: string) {
-  if (!folder.endsWith("/")) folder += "/";
-  if (pathExcluded(folder)) {
-    console.log(chalk.gray(`Ignore: ${folder}`));
-    return;
-  }
+/** Upload a single folder. */
+export async function uploadFolder(pm: PathMapping) {
+  if (!pm.local.endsWith("/")) pm.local += "/";
+  if (!pm.remote.endsWith("/")) pm.remote += "/";
 
-  let dirents = fs.readdirSync(folder, { withFileTypes: true });
-  if (folderExcluded(dirents)) {
-    console.log(chalk.gray(`Ignore: ${folder}`));
-    return;
-  }
+  // if (pathExcluded(folder)) {
+  //   console.log(chalk.gray(`Ignore: ${folder}`));
+  //   return;
+  // }
 
-  if (
-    config.useGitignore &&
-    dirents.map((d) => d.name).includes(".gitignore")
-  ) {
-    console.log(chalk.gray(`Apply: ${folder}.gitignore`));
-    dirents = direntsNotGitignore(folder, dirents);
-  }
+  let dirents = fs.readdirSync(pm.local, { withFileTypes: true });
+  // if (folderExcluded(dirents)) {
+  //   console.log(chalk.gray(`Ignore: ${folder}`));
+  //   return;
+  // }
+
+  // if (
+  //   // config.useGitignore &&
+  //   dirents.map((d) => d.name).includes(".gitignore")
+  // ) {
+  //   console.log(chalk.gray(`Apply: ${folder}.gitignore`));
+  //   dirents = direntsNotGitignore(folder, dirents);
+  // }
 
   await Promise.all(
     dirents.map(async (d) => {
-      if (d.isDirectory()) await uploadFolder(folder + d.name);
+      const next: PathMapping = {
+        local: pm.local + d.name,
+        remote: pm.remote + d.name,
+      };
+      if (d.isDirectory()) await uploadFolder(next);
       else if (d.isFile())
-        await lock.lock(async () => {
-          await uploadFile(folder + d.name);
+        await lock(async () => {
+          await uploadFile(next);
         });
     })
   );
 }
 
-function pathExcluded(path: string) {
-  return config.exclude.map((pat) => minimatch(path, pat)).includes(true);
-}
+// function pathExcluded(path: string) {
+//   return config.exclude.map((pat) => minimatch(path, pat)).includes(true);
+// }
 
-function folderExcluded(dirents: fs.Dirent[]) {
-  let names = dirents.map((d) => d.name);
-  return config.excludeFolderContains
-    .map((pat) => names.map((n) => minimatch(n, pat)).includes(true))
-    .includes(true);
-}
+// function folderExcluded(dirents: fs.Dirent[]) {
+//   let names = dirents.map((d) => d.name);
+//   return config.excludeFolderContains
+//     .map((pat) => names.map((n) => minimatch(n, pat)).includes(true))
+//     .includes(true);
+// }
 
-function direntsNotGitignore(path: string, dirents: fs.Dirent[]) {
-  let git = ignParser.compile(fs.readFileSync(path + ".gitignore", "utf8"));
-  return dirents.filter((d) => git.accepts(d.name));
-}
-
-export default {
-  uploadFile,
-  uploadFolder,
-};
+// function direntsNotGitignore(path: string, dirents: fs.Dirent[]) {
+//   let git = ignParser.compile(fs.readFileSync(path + ".gitignore", "utf8"));
+//   return dirents.filter((d) => git.accepts(d.name));
+// }
