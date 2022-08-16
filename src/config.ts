@@ -13,18 +13,31 @@ type PathMapping = {
 };
 
 const defaultConfig = Object.freeze({
+  /** S3 related configurations. */
   storage: {
+    /** S3 bucket name. */
     bucket: "",
+    /** Global S3 key prefix. */
     prefix: "",
+    /** Profile name of your local credentials. */
     profile: "default",
+    /** Region of the S3 bucket. */
     region: "us-east-1",
-    storageClass: 'GLACIER_IR'
+    /** Object storage class. */
+    storageClass: "GLACIER_IR",
   },
   transfer: {
-    queueSize: 4,
-    partSize: 5, // MB
+    /** See: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_lib_storage.html */
+    multipart: {
+      /** Multipart upload queue size. */
+      queueSize: 4,
+      /** Multipart upload part size, in MB. */
+      partSize: 5,
+    },
     concurrent: {
+      /** How many files will be processed concurrently. */
       limit: 100,
+      /** How long to sleep if the concurrent limit is reached, in ms. */
       interval: 2000,
     },
   },
