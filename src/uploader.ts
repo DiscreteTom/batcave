@@ -1,16 +1,10 @@
 import { Upload } from "@aws-sdk/lib-storage";
-import { S3 } from "@aws-sdk/client-s3";
-import { fromIni } from "@aws-sdk/credential-provider-ini";
 import * as fs from "fs";
 import config from "./config";
 import * as chalk from "chalk";
 import { lock } from "./lock";
 import { PathMapping } from "./model";
-
-let s3 = new S3({
-  credentials: fromIni({ profile: config.storage.profile }),
-  region: config.storage.region,
-});
+import { s3 } from "./s3";
 
 /** Upload a single file. */
 export async function uploadFile(pm: PathMapping) {
