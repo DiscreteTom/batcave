@@ -5,6 +5,7 @@ import * as chalk from "chalk";
 import { lock } from "./lock";
 import { PathMapping } from "./model";
 import { s3 } from "./s3";
+import { ensureFolder } from "./utils";
 
 /** Upload a single file. */
 export async function uploadFile(pm: PathMapping) {
@@ -47,8 +48,7 @@ export async function uploadFile(pm: PathMapping) {
 
 /** Upload a single folder. */
 export async function uploadFolder(pm: PathMapping) {
-  if (!pm.local.endsWith("/")) pm.local += "/";
-  if (!pm.remote.endsWith("/")) pm.remote += "/";
+  ensureFolder(pm);
 
   // if (pathExcluded(folder)) {
   //   console.log(chalk.gray(`Ignore: ${folder}`));
