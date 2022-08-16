@@ -36,6 +36,7 @@ export async function uploadFile(pm: PathMapping) {
       Bucket: bucket,
       Key: key,
       Body: fs.createReadStream(pm.local),
+      StorageClass: config.storage.storageClass,
     },
     queueSize: config.transfer.multipart.queueSize,
     partSize: config.transfer.multipart.partSize * 1024 * 1024,

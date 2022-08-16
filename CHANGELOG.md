@@ -3,6 +3,7 @@
 ## v0.2.0
 
 - Better organized config file structure.
+- Use storage class to save the cost. The default storage class is `GLACIER_IR`.
 - Optimize code.
 
 ## v0.1.0
