@@ -31,13 +31,35 @@ export const defaultConfig = Object.freeze({
     concurrent: {
       /** How many files will be processed concurrently. */
       limit: 100,
-      /** How long to sleep if the concurrent limit is reached, in ms. */
+      /** How long to wait if the concurrent limit is reached, in ms. */
       interval: 2000,
+    },
+  },
+  /** Specify how to scan local folders. */
+  scan: {
+    concurrent: {
+      /** How many folders will be scanned concurrently. */
+      limit: 100,
+      /** How long to wait if the concurrent limit is reached, in ms. */
+      interval: 1000,
+    },
+  },
+  /** Specify how to cache the time modified. */
+  cache: {
+    /** Specify how to cache folder contents. */
+    folder: {
+      /** The name of the file where to cache folder's direct files time modified. */
+      lockFile: "batcave.lock",
+    },
+    /** Specify how to cache top level files. */
+    file: {
+      /** The key of the object's tag where to cache file's time modified. */
+      tag: "TimeModified",
     },
   },
   upload: [] as PathMapping[],
   download: [] as PathMapping[],
-  plugins: [] as string[],
+  // plugins: [] as string[],
 });
 
 export type Config = {
