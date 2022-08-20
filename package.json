@@ -24,6 +24,7 @@
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "minimatch": "^5.0.1",
+    "s3-sync-client": "^3.0.3",
     "sha256-file": "^1.0.0"
   },
   "devDependencies": {

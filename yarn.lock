@@ -1096,6 +1096,11 @@ readable-stream@^3.5.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
+s3-sync-client@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/s3-sync-client/-/s3-sync-client-3.0.3.tgz#79e6442ce3f8c6c630782e0373f819f5fd5ea733"
+  integrity sha512-Y4tF+BjhssxyCehdgC/w1gI6vNOKk7JB0I+pEbHWRz5zntYEydGor57DZeZOxuXqSKB9z9tRi+kixBDxYo6FxA==
+
 safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.npmmirror.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
