@@ -1,7 +1,6 @@
 import { load } from "js-yaml";
 import { readFileSync } from "fs";
 import { homedir } from "os";
-import { defaultsDeep } from "lodash";
 import { must } from "./utils";
 import { Config, defaultConfig, PathMapping } from "./model";
 
@@ -9,11 +8,11 @@ import { Config, defaultConfig, PathMapping } from "./model";
 const filename = process.argv.length > 2 ? process.argv[2] : "config.yml";
 
 // construct config from default config and config file
-const config = defaultsDeep(
-  {},
-  JSON.parse(JSON.stringify(defaultConfig)), // deep copy default config
-  load(readFileSync(filename, "utf-8"))
-) as Config;
+const config = JSON.parse(JSON.stringify(defaultConfig)) as Config; // deep copy default config
+const customerConfig = load(readFileSync(filename, "utf-8")) as Config;
+Object.assign(config.storage, customerConfig.storage);
+config.download = customerConfig.download || [];
+config.upload = customerConfig.upload || [];
 
 must(config.storage.bucket, `Bucket name can't be empty.`);
 
