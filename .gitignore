@@ -89,7 +89,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-# dist
+dist
 
 # Gatsby files
 .cache/
@@ -129,5 +129,4 @@ out
 .yarn/install-state.gz
 .pnp.*
 
-.cache.yml
 config.yml
