@@ -1,6 +1,8 @@
 import { program } from "commander";
 
-program.argument("[config]", "Config file.", "config.yml");
+program
+  .argument("[config]", "Config file.", "config.yml")
+  .option("--dry", "Dry run.", false);
 
 program.parse();
 

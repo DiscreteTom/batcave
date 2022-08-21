@@ -5,6 +5,7 @@ import S3SyncClient = require("s3-sync-client");
 import { Lock } from "./lock";
 import { Filter } from "./model";
 import minimatch = require("minimatch");
+import { opts } from "./args";
 
 // setup s3 client
 const s3 = new S3Client({
@@ -32,7 +33,7 @@ export async function sync(from: string, to: string, pmFilters: Filter[]) {
     monitor.on("progress", showProgress);
 
     console.log(`Sync: ${from} => ${to}`);
-    await _sync(from, to, {
+    const res = await _sync(from, to, {
       commandInput: {
         StorageClass: config.storage.class,
       },
@@ -54,7 +55,16 @@ export async function sync(from: string, to: string, pmFilters: Filter[]) {
             ],
           ]
         : [],
+      dryRun: opts.dry,
     });
+
+    if (opts.dry) {
+      for (const key in res) {
+        res[key].map((obj) => {
+          console.log(`${key}: ${obj.id}`);
+        });
+      }
+    }
   });
 }
 
