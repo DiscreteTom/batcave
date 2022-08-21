@@ -19,6 +19,7 @@
     "@types/gitignore-parser": "^0.0.0",
     "@types/shelljs": "^0.8.11",
     "chalk": "4.1.2",
+    "commander": "^9.4.0",
     "gitignore-parser": "^0.0.2",
     "glob": "^8.0.1",
     "js-yaml": "^4.1.0",

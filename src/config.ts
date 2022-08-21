@@ -3,9 +3,10 @@ import { readFileSync } from "fs";
 import { homedir } from "os";
 import { must } from "./utils";
 import { Config, defaultConfig, PathMapping } from "./model";
+import { args } from "./args";
 
 // try to retrieve file name from command line options
-const filename = process.argv.length > 2 ? process.argv[2] : "config.yml";
+const filename = args[0] || "config.yml";
 
 // construct config from default config and config file
 const config = JSON.parse(JSON.stringify(defaultConfig)) as Config; // deep copy default config
@@ -15,7 +16,7 @@ config.download = customerConfig.download || [];
 config.upload = customerConfig.upload || [];
 config.download.map((task) => (task.filters = task.filters || []));
 config.upload.map((task) => (task.filters = task.filters || []));
-config.filters = customerConfig.filters || []
+config.filters = customerConfig.filters || [];
 
 must(config.storage.bucket, `Bucket name can't be empty.`);
 
