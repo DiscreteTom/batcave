@@ -51,3 +51,5 @@ filters: # global filters
 ```
 
 Then you can use `batcave backup.yml` to backup your files.
+
+Add the option `--dry` to displays the operations that would be performed using the specified command without actually running them.
