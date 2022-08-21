@@ -18,7 +18,7 @@ storage:
   prefix: PREFIX/ # s3 key prefix
   profile: default # local aws profile
   region: us-east-1 # region of your s3 bucket
-  class: GLACIER_IR # s3 storage class
+  class: STANDARD # s3 storage class
 upload:
   # specify local path and remote path
   # local path can use `~` as the home dir

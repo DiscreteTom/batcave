@@ -3,7 +3,7 @@
 ## v0.2.0
 
 - Better organized config file structure.
-- Use storage class to save the cost. The default storage class is `GLACIER_IR`.
+- Use storage class to save the cost. The default storage class is `STANDARD`.
 - Support download from S3 to local.
 - Support dry-run.
 - Optimize code.

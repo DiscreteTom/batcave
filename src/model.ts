@@ -27,7 +27,7 @@ export const defaultConfig = Object.freeze({
     /** Region of the S3 bucket. */
     region: "us-east-1",
     /** Object storage class. */
-    class: "GLACIER_IR",
+    class: "STANDARD",
   },
   upload: [] as PathMapping[],
   download: [] as PathMapping[],
