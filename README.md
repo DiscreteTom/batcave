@@ -1,6 +1,6 @@
 # Batcave
 
-Backup your PC files to AWS S3.
+Use AWS S3 as a file backup service.
 
 ## Installation
 
@@ -16,49 +16,31 @@ Create a file e.g. `backup.yml` with the following content:
 storage:
   bucket: BUCKET_NAME # s3 bucket name
   prefix: PREFIX/ # s3 key prefix
-  queueSize: 4 # multipart upload queue size,
-  partSize: 5 # in MB, multipart upload part size
   profile: default # local aws profile
   region: us-east-1 # region of your s3 bucket
-include:
-  # you can use glob syntax.
-  # the leading '~' will be replaced by your home dir.
+  class: GLACIER_IR # s3 storage class
+upload:
+  # specify local path and remote path
+  # local path can use `~` as the home dir
   # for windows, the home dir is like 'C:/Users/xxx'
-  - ~/.aws
-  - ~/.cdk
-  - ~/.config
-  - ~/.git-secrets
-  - ~/.git-templates
-  - ~/.ssh
-  - ~/.vim
-  - ~/bin
-  - ~/Desktop
-  - ~/Documents
-  - ~/Downloads
-  - ~/Favorites
-  - ~/Music
-  - ~/Pictures
-  - ~/Videos
-exclude:
-  # you can use glob syntax
-  - "**/node_modules"
-  - "**/.venv"
-  - "**/.git"
-excludeFolderContains:
-  # you can use glob syntax
-  - .gitignore
-concurrent:
-  limit: 100 # how many files will be processed concurrently
-  interval: 2000 # in ms, how long to sleep if the concurrent limit is reached
-useGitignore: true # use folder's '.gitignore' to ignore top-level dirents.
+  - local: ~/Documents
+    remote: Documents
+  # you can specify local only
+  # then the remote will be the direct folder name
+  # in this case, the remote will be `Videos`
+  - local: ~/Videos
+  # all `\` in local will be replaced to `/`
+  # so it's ok to use `\` in local
+  - local: ~\Pictures
+  # remote path must be unique
+  # so the following `remote` will throw an error
+  # `Duplicated remote path: Documents`
+  - local: /home/ubuntu/doc
+    remote: Documents
+# same rules as the upload
+# by default, download tasks will be executed after upload tasks
+download:
+  - local: ~/Documents
 ```
 
-> Multipart upload configuration: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_lib_storage.html
-
 Then you can use `batcave backup.yml` to backup your files.
-
-## Cache
-
-All included files will be sha256 hashed and saved in `.cache.yml` file.
-
-When you start backup, those hash values will be used to check if your files are modified.
