@@ -37,10 +37,17 @@ upload:
   # `Duplicated remote path: Documents`
   - local: /home/ubuntu/doc
     remote: Documents
+  # you can use glob filters to filter files
+  - local: /home/ubuntu/Musics
+    filters:
+      - exclude: "*" # use glob expression to exclude files
+      - include: "*.mp4" # use include to escape from exclude
 # same rules as the upload
 # by default, download tasks will be executed after upload tasks
 download:
   - local: ~/Documents
+filters: # global filters
+  - exclude: "**/node_modules"
 ```
 
 Then you can use `batcave backup.yml` to backup your files.
