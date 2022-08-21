@@ -1,9 +1,18 @@
+/** Specif how to filter files. */
+export type Filter = {
+  /** Glob string. */
+  include?: string;
+  /** Glob string. */
+  exclude?: string;
+};
+
 /** Specify how the local path maps the remote path in S3. */
 export type PathMapping = {
   /** Local path, should be absolute path, or relative to the home directory(~). */
   local: string;
   /** Remote path relative to the global prefix. */
   remote: string;
+  filters: Filter[];
 };
 
 export const defaultConfig = Object.freeze({
@@ -22,7 +31,8 @@ export const defaultConfig = Object.freeze({
   },
   upload: [] as PathMapping[],
   download: [] as PathMapping[],
-  // plugins: [] as string[],
+  /** Global filters, will be applied to every upload/download task. */
+  filters: [] as Filter[],
 });
 
 export type Config = {

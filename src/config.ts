@@ -13,6 +13,9 @@ const customerConfig = load(readFileSync(filename, "utf-8")) as Config;
 Object.assign(config.storage, customerConfig.storage);
 config.download = customerConfig.download || [];
 config.upload = customerConfig.upload || [];
+config.download.map((task) => (task.filters = task.filters || []));
+config.upload.map((task) => (task.filters = task.filters || []));
+config.filters = customerConfig.filters || []
 
 must(config.storage.bucket, `Bucket name can't be empty.`);
 

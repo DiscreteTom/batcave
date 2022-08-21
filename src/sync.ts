@@ -3,6 +3,8 @@ import { fromIni } from "@aws-sdk/credential-provider-ini";
 import config from "./config";
 import S3SyncClient = require("s3-sync-client");
 import { Lock } from "./lock";
+import { Filter } from "./model";
+import minimatch = require("minimatch");
 
 // setup s3 client
 const s3 = new S3Client({
@@ -23,7 +25,7 @@ function showProgress({ count }) {
 const lock = new Lock(1, 1000);
 
 /** Sync remote and local. */
-export async function sync(from: string, to: string) {
+export async function sync(from: string, to: string, pmFilters: Filter[]) {
   await lock.lock(async () => {
     const { sync: _sync } = new S3SyncClient({ client: s3 });
     const monitor = new S3SyncClient.TransferMonitor();
@@ -35,6 +37,16 @@ export async function sync(from: string, to: string) {
         StorageClass: config.storage.class,
       },
       monitor,
+      filters: config.filters
+        .map(filterToFunc)
+        .concat(pmFilters.map(filterToFunc)),
     });
   });
+}
+
+function filterToFunc(filter: Filter) {
+  if (filter.exclude)
+    return { exclude: (key: string) => minimatch(key, filter.exclude) };
+  if (filter.include)
+    return { include: (key: string) => minimatch(key, filter.include) };
 }
