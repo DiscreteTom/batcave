@@ -40,6 +40,20 @@ export async function sync(from: string, to: string, pmFilters: Filter[]) {
       filters: config.filters
         .map(filterToFunc)
         .concat(pmFilters.map(filterToFunc)),
+      // relocation is required for download
+      // see https://github.com/jeanbmar/s3-sync-client/issues/40
+      relocations: from.startsWith("s3://")
+        ? [
+            [
+              from
+                .slice(5) // remove `s3://`
+                .split("/")
+                .slice(1) // remove bucket name
+                .join("/"),
+              "",
+            ],
+          ]
+        : [],
     });
   });
 }
