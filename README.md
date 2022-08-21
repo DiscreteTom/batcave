@@ -1,5 +1,7 @@
 # Batcave
 
+[![npm](https://img.shields.io/npm/v/@discretetom/batcave?style=flat-square)](https://www.npmjs.com/package/@discretetom/batcave)
+
 Use AWS S3 as a file backup service.
 
 ## Installation
