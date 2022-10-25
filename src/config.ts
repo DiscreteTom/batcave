@@ -10,13 +10,20 @@ const filename = args[0] || "config.yml";
 
 // construct config from default config and config file
 const config = JSON.parse(JSON.stringify(defaultConfig)) as Config; // deep copy default config
-const customerConfig = load(readFileSync(filename, "utf-8")) as Config;
-Object.assign(config.storage, customerConfig.storage);
-config.download = customerConfig.download || [];
-config.upload = customerConfig.upload || [];
-config.download.map((task) => (task.filters = task.filters || []));
-config.upload.map((task) => (task.filters = task.filters || []));
-config.filters = customerConfig.filters || [];
+const userConfig = load(readFileSync(filename, "utf-8")) as Config;
+Object.assign(config.storage, userConfig.storage);
+Object.assign(config.options, userConfig.options);
+config.download = userConfig.download || [];
+config.upload = userConfig.upload || [];
+function formatPathMapping(pm: PathMapping) {
+  must(pm.local != "", "Local path cannot be empty.");
+  must(pm.remote != "", "Remote path cannot be empty.");
+  pm.filters = pm.filters || [];
+  pm.options = Object.assign({}, pm.options);
+}
+config.download.map(formatPathMapping);
+config.upload.map(formatPathMapping);
+config.filters = userConfig.filters || [];
 
 must(config.storage.bucket, `Bucket name can't be empty.`);
 
@@ -43,9 +50,6 @@ function processRemote(pms: PathMapping[]) {
     if (remoteSet.has(pm.remote))
       throw new Error(`Duplicated remote path: ${pm.remote}`);
     remoteSet.add(pm.remote);
-
-    // replace remote path to S3 URI
-    pm.remote = `s3://${config.storage.bucket}/${config.storage.prefix}${pm.remote}`;
   });
 }
 processRemote(config.upload);
