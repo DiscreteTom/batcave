@@ -23,7 +23,9 @@ config.download.forEach((pm) => {
 function optionsToString(options: SyncOptions) {
   const result = [] as string[];
   Object.keys(options).forEach((key) => {
-    result.push(`--${key}`, options[key]);
+    result.push(`--${key}`);
+    // for non-boolean value, add the value
+    if (options[key] !== true) result.push(String(options[key]));
   });
   return result.join(" ");
 }

@@ -1,5 +1,5 @@
 /** CLI options without leading `--`. E.g.: `{"quiet": true}` */
-export type SyncOptions = { [key: string]: string };
+export type SyncOptions = { [key: string]: string | number | boolean };
 
 /** See https://docs.aws.amazon.com/cli/latest/reference/s3/index.html#use-of-exclude-and-include-filters . */
 export type Filter = { include: string } | { exclude: string };
