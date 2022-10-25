@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.3.0
+
+- New config format.
+- Use AWS CLI v2.
+
 ## v0.2.0
 
 - Better organized config file structure.
