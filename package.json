@@ -13,13 +13,8 @@
     "batcave": "out/index.js"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.79.0",
-    "@aws-sdk/credential-provider-ini": "^3.79.0",
-    "@aws-sdk/lib-storage": "^3.79.0",
     "commander": "^9.4.0",
-    "js-yaml": "^4.1.0",
-    "minimatch": "^5.0.1",
-    "s3-sync-client": "^3.0.3"
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.5",
