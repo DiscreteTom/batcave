@@ -2,7 +2,7 @@
 
 import config from "./config";
 import { Filter, PathMapping, SyncOptions } from "./model";
-import { exec } from "child_process";
+import { spawnSync } from "child_process";
 import { opts } from "./args";
 
 config.upload.forEach((pm) => {
@@ -56,11 +56,11 @@ function sync(from: string, to: string, pm: PathMapping) {
     filtersToString(config.filters),
     optionsToString(pm.options),
     filtersToString(pm.filters),
-  ].join(" ");
+  ];
 
   if (opts.dry) {
-    console.log(cmd);
+    console.log(cmd.join(" "));
   } else {
-    exec(cmd);
+    spawnSync(cmd[0], cmd.slice(1), { stdio: "inherit" });
   }
 }
